@@ -1,16 +1,23 @@
 package com.juangofh.musicallythelife
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
+import android.widget.Toast
+import java.io.FileOutputStream
 
 class BackgroundSoundService : Service() {
 
     private var player: MediaPlayer? = null
     private var listener: OnProgressListener? = null
     private val binder = BackgroundSoundBinder()
+    private var currentSong: Int = R.raw.freaking_out
 
     inner class BackgroundSoundBinder : Binder() {
         fun getService(): BackgroundSoundService = this@BackgroundSoundService
@@ -20,13 +27,18 @@ class BackgroundSoundService : Service() {
         return binder
     }
 
+    override fun onRebind(intent: Intent?) {
+        super.onRebind(intent)
+        Toast.makeText(this, "rebind", Toast.LENGTH_SHORT).show()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return START_STICKY
     }
 
     override fun onCreate() {
         super.onCreate()
-        player = MediaPlayer.create(this, R.raw.all_my_love)
+        player = MediaPlayer.create(this, currentSong)
         player?.isLooping = true
         player?.setVolume(100f, 100f)
     }
@@ -69,6 +81,27 @@ class BackgroundSoundService : Service() {
 
     fun currentTime(): Int {
         return player?.currentPosition ?: 0
+    }
+
+    fun getMetadata(context: Context): MetaData {
+        val mmr = MediaMetadataRetriever()
+        mmr.setDataSource(
+            context,
+            Uri.parse("android.resource://com.juangofh.musicallythelife/$currentSong")
+        )
+
+        val nameOfSong = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE) ?: "unknown"
+        val authorOfSong =
+            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) ?: "unknown"
+        val album = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM) ?: "unknown"
+        val genre = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE) ?: "unknown"
+        val year = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR) ?: "unknown"
+
+        val destFolder = cacheDir.absolutePath
+        val out = FileOutputStream("$destFolder/myAlbumArt.png")
+        createAlbumArt(mmr)?.compress(Bitmap.CompressFormat.PNG, 100, out)
+
+        return MetaData(nameOfSong, authorOfSong, album, genre, year, "$destFolder/myAlbumArt.png")
     }
 
 }

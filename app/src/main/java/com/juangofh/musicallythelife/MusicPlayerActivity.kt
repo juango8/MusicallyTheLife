@@ -4,12 +4,16 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.palette.graphics.Palette
 import kotlinx.android.synthetic.main.activity_music_player.*
 
 class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
@@ -20,6 +24,7 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
     @Suppress("DEPRECATION")
     private val mHandler = Handler()
     private var duration: Int = 0
+    private lateinit var context: Context
 
     private val connection = object : ServiceConnection {
 
@@ -34,6 +39,11 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
                 onPlaySong()
             }
             Toast.makeText(this@MusicPlayerActivity, "connected", Toast.LENGTH_SHORT).show()
+            val metaData = mService.getMetadata(context)
+            text_title.text = metaData.nameOfSong
+            text_artist.text = metaData.author
+            image_album_art.setImageURI(Uri.parse(metaData.albumCover))
+            setBackgroundColors(context, metaData.albumCover)
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
@@ -53,10 +63,12 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
 
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_music_player)
 
+        context = this@MusicPlayerActivity
         startService(Intent(this, BackgroundSoundService::class.java).also { intent ->
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
         })
@@ -114,11 +126,22 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
         button_play.setImageResource(R.drawable.ic_pause)
     }
 
-    private fun millisecondsToString(time: Int): String {
-        val minutes: Int = time / 1000 / 60
-        val seconds: Int = time / 1000 % 60
-        if (seconds < 10)
-            return "$minutes:0$seconds"
-        return "$minutes:$seconds"
+    fun setBackgroundColors(context: Context, pathImageResource: String) {
+        val image = BitmapFactory.decodeFile(pathImageResource)
+        Palette.from(image).generate { palette ->
+            palette?.let {
+                val backgroundColor = it.getDominantColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.brown
+                    )
+                )
+                view1.setBackgroundColor(backgroundColor)
+                view2.setBackgroundColor(backgroundColor)
+//                val textColor = if (isColorDark(backgroundColor)) Color.WHITE else Color.BLACK
+//                text_title.setTextColor(textColor)
+//                text_artist.setTextColor(textColor)
+            }
+        }
     }
 }
