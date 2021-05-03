@@ -104,8 +104,8 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
         bindService(intent, connection, Context.BIND_AUTO_CREATE)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         unbindService(connection)
         mBound = false
     }
