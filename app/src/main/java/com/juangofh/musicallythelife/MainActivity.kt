@@ -15,12 +15,12 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.navigation_home -> {
                     title = getString(R.string.title_home)
-                    viewPager.setCurrentItem(0, false)
+                    view_pager.setCurrentItem(0, false)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_playlist -> {
                     title = getString(R.string.title_playlist)
-                    viewPager.setCurrentItem(1, false)
+                    view_pager.setCurrentItem(1, false)
                     return@OnNavigationItemSelectedListener true
                 }
             }
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        viewPager.unregisterOnPageChangeCallback(onNavigationPageChangeCallback)
+        view_pager.unregisterOnPageChangeCallback(onNavigationPageChangeCallback)
 
     }
 
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupViewPager() {
         val viewPagerAdapter = ViewPagerAdapter(this, NUM_PAGES)
-        viewPager.adapter = viewPagerAdapter
-        viewPager.registerOnPageChangeCallback(onNavigationPageChangeCallback)
+        view_pager.adapter = viewPagerAdapter
+        view_pager.registerOnPageChangeCallback(onNavigationPageChangeCallback)
     }
 }

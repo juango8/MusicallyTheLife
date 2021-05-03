@@ -6,34 +6,28 @@
     android:layout_height="match_parent">
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
+        android:id="@+id/view_pager"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/controlMenu"
+        app:layout_constraintBottom_toTopOf="@+id/control_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/controlMenu"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/control_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#33121212"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="5dp"
         android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         app:layout_constraintBottom_toTopOf="@id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewPager">
+        app:layout_constraintTop_toBottomOf="@id/view_pager">
 
-        <!--        <ImageView-->
-        <!--            android:layout_width="@dimen/height_button"-->
-        <!--            android:layout_height="@dimen/height_button"-->
-        <!--            android:contentDescription="@string/content_description_button_play_pause"-->
-        <!--            android:src="@drawable/ic_play_arrow"-->
-        <!--            app:tint="@color/yellow_200" />-->
         <ImageButton
             android:id="@+id/button_play"
             android:layout_width="60dp"
@@ -42,9 +36,68 @@
             android:contentDescription="@string/app_name"
             android:padding="12dp"
             android:src="@drawable/ic_play_arrow"
-            android:tint="@color/white" />
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </LinearLayout>
+        <ImageButton
+            android:id="@+id/button_previous"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/next_previous_button_background"
+            android:contentDescription="@string/app_name"
+            android:padding="4dp"
+            android:src="@drawable/ic_previous"
+            android:tint="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/button_play"
+            app:layout_constraintEnd_toStartOf="@id/button_play"
+            app:layout_constraintTop_toTopOf="@id/button_play" />
+
+        <ImageButton
+            android:id="@+id/button_next"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/next_previous_button_background"
+            android:contentDescription="@string/app_name"
+            android:padding="4dp"
+            android:src="@drawable/ic_next"
+            android:tint="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/button_play"
+            app:layout_constraintStart_toEndOf="@id/button_play"
+            app:layout_constraintTop_toTopOf="@id/button_play" />
+
+        <ImageButton
+            android:id="@+id/button_shuffle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="20dp"
+            android:background="@null"
+            android:contentDescription="@string/app_name"
+            android:padding="4dp"
+            android:src="@drawable/ic_shuffle"
+            android:tint="@color/yellow_200"
+            app:layout_constraintBottom_toBottomOf="@id/button_play"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/button_play" />
+
+        <ImageButton
+            android:id="@+id/button_repeat"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="20dp"
+            android:background="@null"
+            android:contentDescription="@string/app_name"
+            android:padding="4dp"
+            android:src="@drawable/ic_repeat"
+            android:tint="@color/yellow_200"
+            app:layout_constraintBottom_toBottomOf="@id/button_play"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/button_play" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
