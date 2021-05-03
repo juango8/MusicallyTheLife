@@ -33,6 +33,26 @@ class BackgroundSoundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.getStringExtra("myActionName")) {
+            NotificationReceiver.ACTION_PLAY -> {
+                Toast.makeText(this, "play", Toast.LENGTH_SHORT).show()
+                if (player?.isPlaying == true) {
+                    pauseMusic()
+                    listener?.onPauseSong()
+                } else {
+                    startMusic()
+                    listener?.onPlaySong()
+                }
+            }
+            NotificationReceiver.ACTION_NEXT -> {
+                Toast.makeText(this, "next", Toast.LENGTH_SHORT).show()
+//                listener?.nextClicked()
+            }
+            NotificationReceiver.ACTION_PREV -> {
+                Toast.makeText(this, "previous", Toast.LENGTH_SHORT).show()
+//                listener?.prevClicked()
+            }
+        }
         return START_STICKY
     }
 

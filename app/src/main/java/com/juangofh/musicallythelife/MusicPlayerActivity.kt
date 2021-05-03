@@ -42,6 +42,7 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
             val binder = service as BackgroundSoundService.BackgroundSoundBinder
             mService = binder.getService()
             mBound = true
+            mService.setOnProgressListener(this@MusicPlayerActivity)
             metaData = mService.getMetadata(context)
             text_title.text = metaData.nameOfSong
             text_artist.text = metaData.author
@@ -83,7 +84,6 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
         })
         button_play.setOnClickListener {
             if (mBound) {
-                mService.setOnProgressListener(this)
                 if (mService.isPlaying()) {
                     mService.pauseMusic()
                 } else {
@@ -175,7 +175,7 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
             .setContentTitle(metaData.nameOfSong)
             .setContentText(metaData.author)
             .addAction(R.drawable.ic_previous, "Previous", prevPendingIntent)
-            .addAction(R.drawable.ic_play_arrow, "Play", playPendingIntent)
+            .addAction(playPauseBtn, "Play", playPendingIntent)
             .addAction(R.drawable.ic_next, "Next", nextPendingIntent)
             .setStyle(
                 androidx.media.app.NotificationCompat.MediaStyle()
