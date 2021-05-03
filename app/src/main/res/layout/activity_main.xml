@@ -22,17 +22,27 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         app:layout_constraintBottom_toTopOf="@id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/viewPager">
 
-        <ImageView
-            android:layout_width="@dimen/height_button"
-            android:layout_height="@dimen/height_button"
-            android:contentDescription="@string/content_description_button_play_pause"
+        <!--        <ImageView-->
+        <!--            android:layout_width="@dimen/height_button"-->
+        <!--            android:layout_height="@dimen/height_button"-->
+        <!--            android:contentDescription="@string/content_description_button_play_pause"-->
+        <!--            android:src="@drawable/ic_play_arrow"-->
+        <!--            app:tint="@color/yellow_200" />-->
+        <ImageButton
+            android:id="@+id/button_play"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/play_button_background"
+            android:contentDescription="@string/app_name"
+            android:padding="12dp"
             android:src="@drawable/ic_play_arrow"
-            app:tint="@color/yellow_200" />
+            android:tint="@color/white" />
 
     </LinearLayout>
 
