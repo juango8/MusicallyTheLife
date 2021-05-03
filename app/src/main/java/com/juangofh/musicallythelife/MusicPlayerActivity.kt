@@ -16,6 +16,8 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
 
     private var mBound: Boolean = false
     private lateinit var mService: BackgroundSoundService
+
+    @Suppress("DEPRECATION")
     private val mHandler = Handler()
     private var duration: Int = 0
 
