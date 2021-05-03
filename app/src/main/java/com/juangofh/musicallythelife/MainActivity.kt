@@ -2,6 +2,7 @@ package com.juangofh.musicallythelife
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -26,6 +27,15 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
+    private var onNavigationPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            when (position) {
+                0 -> navigation.menu.findItem(R.id.navigation_home).isChecked = true
+                1 -> navigation.menu.findItem(R.id.navigation_playlist).isChecked = true
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         Thread.sleep(2000)
@@ -36,6 +46,13 @@ class MainActivity : AppCompatActivity() {
 
         setupNavigation()
         setupViewPager()
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewPager.unregisterOnPageChangeCallback(onNavigationPageChangeCallback)
+
     }
 
     private fun setupNavigation() {
@@ -45,6 +62,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewPager() {
         val viewPagerAdapter = ViewPagerAdapter(this, NUM_PAGES)
         viewPager.adapter = viewPagerAdapter
-
+        viewPager.registerOnPageChangeCallback(onNavigationPageChangeCallback)
     }
 }
