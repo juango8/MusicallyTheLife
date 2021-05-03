@@ -1,4 +1,4 @@
-package com.juangofh.musicallythelife
+package com.juangofh.musicallythelife.ui
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -18,10 +18,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.palette.graphics.Palette
+import com.juangofh.musicallythelife.*
 import com.juangofh.musicallythelife.ApplicationClass.Companion.ACTION_NEXT
 import com.juangofh.musicallythelife.ApplicationClass.Companion.ACTION_PLAY
 import com.juangofh.musicallythelife.ApplicationClass.Companion.ACTION_PREV
 import com.juangofh.musicallythelife.ApplicationClass.Companion.CHANNEL_ID_2
+import com.juangofh.musicallythelife.data.MetaData
+import com.juangofh.musicallythelife.data.NotificationReceiver
+import com.juangofh.musicallythelife.service.BackgroundSoundService
+import com.juangofh.musicallythelife.service.OnProgressListener
+import com.juangofh.musicallythelife.utils.millisecondsToString
 import kotlinx.android.synthetic.main.activity_music_player.*
 
 class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {

@@ -1,4 +1,4 @@
-package com.juangofh.musicallythelife
+package com.juangofh.musicallythelife.data
 
 import android.content.Context
 

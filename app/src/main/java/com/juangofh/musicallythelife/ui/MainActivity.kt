@@ -1,10 +1,11 @@
-package com.juangofh.musicallythelife
+package com.juangofh.musicallythelife.ui
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.juangofh.musicallythelife.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 private const val NUM_PAGES = 2

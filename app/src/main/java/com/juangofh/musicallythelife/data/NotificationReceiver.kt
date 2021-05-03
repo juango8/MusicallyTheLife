@@ -1,8 +1,9 @@
-package com.juangofh.musicallythelife
+package com.juangofh.musicallythelife.data
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.juangofh.musicallythelife.service.BackgroundSoundService
 
 class NotificationReceiver : BroadcastReceiver() {
 

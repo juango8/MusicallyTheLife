@@ -1,4 +1,4 @@
-package com.juangofh.musicallythelife
+package com.juangofh.musicallythelife.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

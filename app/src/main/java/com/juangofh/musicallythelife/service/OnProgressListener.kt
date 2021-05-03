@@ -1,4 +1,4 @@
-package com.juangofh.musicallythelife
+package com.juangofh.musicallythelife.service
 
 interface OnProgressListener {
 

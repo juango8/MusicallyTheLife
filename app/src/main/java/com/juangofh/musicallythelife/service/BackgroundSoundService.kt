@@ -1,4 +1,4 @@
-package com.juangofh.musicallythelife
+package com.juangofh.musicallythelife.service
 
 import android.app.Service
 import android.content.Context
@@ -10,6 +10,11 @@ import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
 import android.widget.Toast
+import com.juangofh.musicallythelife.*
+import com.juangofh.musicallythelife.data.MetaData
+import com.juangofh.musicallythelife.data.NotificationReceiver
+import com.juangofh.musicallythelife.data.Preferences
+import com.juangofh.musicallythelife.utils.createAlbumArt
 import java.io.FileOutputStream
 
 class BackgroundSoundService : Service() {

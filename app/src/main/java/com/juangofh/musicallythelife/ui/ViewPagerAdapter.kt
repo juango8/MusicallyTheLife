@@ -1,4 +1,4 @@
-package com.juangofh.musicallythelife
+package com.juangofh.musicallythelife.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
