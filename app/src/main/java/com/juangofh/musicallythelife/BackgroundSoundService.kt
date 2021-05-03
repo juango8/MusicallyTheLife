@@ -17,7 +17,7 @@ class BackgroundSoundService : Service() {
     private var player: MediaPlayer? = null
     private var listener: OnProgressListener? = null
     private val binder = BackgroundSoundBinder()
-    private var currentSong: Int = R.raw.freaking_out
+    private var currentSong: Int = R.raw.all_my_love
 
     inner class BackgroundSoundBinder : Binder() {
         fun getService(): BackgroundSoundService = this@BackgroundSoundService

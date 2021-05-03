@@ -1,23 +1,32 @@
 package com.juangofh.musicallythelife
 
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
+import android.support.v4.media.session.MediaSessionCompat
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.palette.graphics.Palette
+import com.juangofh.musicallythelife.ApplicationClass.Companion.ACTION_NEXT
+import com.juangofh.musicallythelife.ApplicationClass.Companion.ACTION_PLAY
+import com.juangofh.musicallythelife.ApplicationClass.Companion.ACTION_PREV
+import com.juangofh.musicallythelife.ApplicationClass.Companion.CHANNEL_ID_2
 import kotlinx.android.synthetic.main.activity_music_player.*
 
 class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
 
+    private lateinit var metaData: MetaData
     private var mBound: Boolean = false
     private lateinit var mService: BackgroundSoundService
 
@@ -25,6 +34,7 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
     private val mHandler = Handler()
     private var duration: Int = 0
     private lateinit var context: Context
+    private lateinit var mediaSession: MediaSessionCompat
 
     private val connection = object : ServiceConnection {
 
@@ -32,23 +42,21 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
             val binder = service as BackgroundSoundService.BackgroundSoundBinder
             mService = binder.getService()
             mBound = true
+            metaData = mService.getMetadata(context)
+            text_title.text = metaData.nameOfSong
+            text_artist.text = metaData.author
+            image_album_art.setImageURI(Uri.parse(metaData.albumCover))
+            setBackgroundColors(context, metaData.albumCover)
             if (mService.isPlaying()) {
                 duration = mService.duration()
                 player_seekbar.max = duration
                 mRunnable.run()
                 onPlaySong()
             }
-            Toast.makeText(this@MusicPlayerActivity, "connected", Toast.LENGTH_SHORT).show()
-            val metaData = mService.getMetadata(context)
-            text_title.text = metaData.nameOfSong
-            text_artist.text = metaData.author
-            image_album_art.setImageURI(Uri.parse(metaData.albumCover))
-            setBackgroundColors(context, metaData.albumCover)
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
-            Toast.makeText(this@MusicPlayerActivity, "disconnected", Toast.LENGTH_SHORT).show()
-            mBound = false
+            mBound = false // TODO mService = null?
         }
 
     }
@@ -69,6 +77,7 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
         setContentView(R.layout.activity_music_player)
 
         context = this@MusicPlayerActivity
+        mediaSession = MediaSessionCompat(this, "PlayerAudio")
         startService(Intent(this, BackgroundSoundService::class.java).also { intent ->
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
         })
@@ -120,10 +129,14 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
 
     override fun onPauseSong() {
         button_play.setImageResource(R.drawable.ic_play_arrow)
+        if (mBound)
+            showNotification(R.drawable.ic_play_arrow)
     }
 
     override fun onPlaySong() {
         button_play.setImageResource(R.drawable.ic_pause)
+        if (mBound)
+            showNotification(R.drawable.ic_pause)
     }
 
     fun setBackgroundColors(context: Context, pathImageResource: String) {
@@ -138,10 +151,41 @@ class MusicPlayerActivity : AppCompatActivity(), OnProgressListener {
                 )
                 view1.setBackgroundColor(backgroundColor)
                 view2.setBackgroundColor(backgroundColor)
-//                val textColor = if (isColorDark(backgroundColor)) Color.WHITE else Color.BLACK
-//                text_title.setTextColor(textColor)
-//                text_artist.setTextColor(textColor)
             }
         }
+    }
+
+    private fun showNotification(playPauseBtn: Int) {
+        val intent = Intent(this, MainActivity::class.java)
+        val contentIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        val prevIntent = Intent(this, NotificationReceiver::class.java).setAction(ACTION_PREV)
+        val prevPendingIntent =
+            PendingIntent.getBroadcast(this, 0, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val playIntent = Intent(this, NotificationReceiver::class.java).setAction(ACTION_PLAY)
+        val playPendingIntent =
+            PendingIntent.getBroadcast(this, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val nextIntent = Intent(this, NotificationReceiver::class.java).setAction(ACTION_NEXT)
+        val nextPendingIntent =
+            PendingIntent.getBroadcast(this, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val picture: Bitmap? = BitmapFactory.decodeFile(metaData.albumCover)
+//            BitmapFactory.decodeResource(resources, metaData.albumCover)
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID_2)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setLargeIcon(picture)
+            .setContentTitle(metaData.nameOfSong)
+            .setContentText(metaData.author)
+            .addAction(R.drawable.ic_previous, "Previous", prevPendingIntent)
+            .addAction(R.drawable.ic_play_arrow, "Play", playPendingIntent)
+            .addAction(R.drawable.ic_next, "Next", nextPendingIntent)
+            .setStyle(
+                androidx.media.app.NotificationCompat.MediaStyle()
+                    .setMediaSession(mediaSession.sessionToken)
+            )
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setContentIntent(contentIntent)
+            .setOnlyAlertOnce(true)
+            .build()
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(0, notification)
     }
 }
