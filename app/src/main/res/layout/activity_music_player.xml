@@ -49,8 +49,8 @@
         android:layout_width="200dp"
         android:layout_height="260dp"
         android:contentDescription="@string/app_name"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"
+        android:background="@color/white"
+        android:src="@drawable/creature_cat_derp"
         app:layout_constraintBottom_toBottomOf="@id/viewSupporterForAlbumArt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -118,12 +118,12 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            android:id="@+id/text_lyrics"
+            android:id="@+id/more_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:gravity="center"
-            android:text="@string/lyrics"
+            android:text="@string/more_info"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="15sp"
@@ -133,10 +133,10 @@
         <ImageView
             android:id="@+id/image_lyrics"
             android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_up"
-            app:layout_constraintBottom_toTopOf="@id/text_lyrics"
+            app:layout_constraintBottom_toTopOf="@id/more_info"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:tint="@color/yellow_200" />
@@ -216,6 +216,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:progressTint="@color/brown"
+            android:thumbTint="@color/brown"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="25dp"
             android:progress="30"

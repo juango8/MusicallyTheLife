@@ -1,5 +1,6 @@
 package com.juangofh.musicallythelife
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -46,6 +47,11 @@ class MainActivity : AppCompatActivity() {
 
         setupNavigation()
         setupViewPager()
+
+        button_play.setOnClickListener {
+            val intent = Intent(this@MainActivity, MusicPlayerActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 
